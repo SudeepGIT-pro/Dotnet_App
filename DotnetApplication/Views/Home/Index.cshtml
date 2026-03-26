@@ -1,0 +1,59 @@
+﻿@model DotnetApplication.Models.IndexViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-3">Property Rates</h1>
+
+    <p class="text-muted">Click "Show details" for a property to view Area and Amount. By default only the name and rate are shown.</p>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-end">Rate / sqft</th>
+                <th class="text-center">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td class="text-end">@String.Format("{0:N2}", item.RatePerSqFt)</td>
+                    <td class="text-center">
+                        <form asp-action="Index" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="SelectedPropertyName" value="@item.Name" />
+                            <button type="submit" class="btn btn-sm btn-primary">Show details</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.SelectedProperty != null)
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">@Model.SelectedProperty.Name</h4>
+                <p><strong>Area (sqft):</strong> @Model.SelectedProperty.AreaSqFt</p>
+                <p><strong>Rate / sqft:</strong> @String.Format("{0:N2}", Model.SelectedProperty.RatePerSqFt)</p>
+                <p><strong>Amount:</strong> @String.Format("{0:N2}", Model.SelectedProperty.Amount)</p>
+            </div>
+        </div>
+    }
+
+    <div class="mt-4">
+        <p><strong>Totals (hidden from list):</strong></p>
+        <ul>
+            <li>Total Area: @Model.TotalArea</li>
+            <li>Total Amount: @String.Format("{0:N2}", Model.TotalAmount)</li>
+            <li>Overall Rate (Amount / Area): @String.Format("{0:N2}", Model.OverallRate)</li>
+        </ul>
+    </div>
+
+</div>
