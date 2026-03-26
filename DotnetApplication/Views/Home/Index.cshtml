@@ -14,7 +14,7 @@
             <tr>
                 <th>Description</th>
                 <th class="text-end">Rate / sqft</th>
-                <th class="text-center">Details</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +22,28 @@
             {
                 <tr>
                     <td>@item.Name</td>
-                    <td class="text-end">@String.Format("{0:N2}", item.RatePerSqFt)</td>
+                    @if (Model.EditPropertyName == item.Name)
+                    {
+                        <td class="text-end">
+                            <form asp-action="SaveRate" method="post" style="display:inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="EditPropertyName" value="@item.Name" />
+                                <input type="number" name="NewRate" value="@item.RatePerSqFt" step="0.01" class="form-control form-control-sm d-inline-block" style="width:120px" />
+                                <button type="submit" class="btn btn-sm btn-success ms-1">Save</button>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-end">
+                            @String.Format("{0:N2}", item.RatePerSqFt)
+                            <form asp-action="EditRate" method="post" style="display:inline" class="ms-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="EditPropertyName" value="@item.Name" />
+                                <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+                            </form>
+                        </td>
+                    }
                     <td class="text-center">
                         <form asp-action="Index" method="post" style="display:inline">
                             @Html.AntiForgeryToken()

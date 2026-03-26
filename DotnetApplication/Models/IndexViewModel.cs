@@ -13,6 +13,10 @@ namespace DotnetApplication.Models
         public string SelectedPropertyName { get; set; } = string.Empty;
         public PropertyItem? SelectedProperty => Items.FirstOrDefault(i => i.Name == SelectedPropertyName);
 
+        // Edit mode: which property is being edited and the new rate value
+        public string EditPropertyName { get; set; } = string.Empty;
+        public decimal NewRate { get; set; }
+
         // Property items for the rate/area table
         public List<PropertyItem> Items { get; set; } = new List<PropertyItem>();
 
